@@ -1,2 +1,2 @@
-# BBPower
-Strategy based on the Bulls/Bears Power indicator.
+# Bulls Power
+Strategy based on the Bulls Power indicator.
