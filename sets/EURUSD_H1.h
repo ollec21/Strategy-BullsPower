@@ -12,15 +12,12 @@ struct Stg_BullsPower_EURUSD_H1_Params : Stg_BullsPower_Params {
     BullsPower_Period = 13;
     BullsPower_Applied_Price = 1;
     BullsPower_Shift = 0;
-    BullsPower_TrailingStopMethod = 0;
-    BullsPower_TrailingProfitMethod = 0;
+    BullsPower_SignalOpenMethod = 0;
     BullsPower_SignalOpenLevel = 0;
-    BullsPower_SignalBaseMethod = 0;
-    BullsPower_SignalOpenMethod1 = 0;
-    BullsPower_SignalOpenMethod2 = 0;
+    BullsPower_SignalCloseMethod = 0;
     BullsPower_SignalCloseLevel = 0;
-    BullsPower_SignalCloseMethod1 = 0;
-    BullsPower_SignalCloseMethod2 = 0;
+    BullsPower_PriceLimitMethod = 0;
+    BullsPower_PriceLimitLevel = 0;
     BullsPower_MaxSpread = 0;
   }
 };
