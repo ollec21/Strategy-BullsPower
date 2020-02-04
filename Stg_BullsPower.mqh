@@ -20,6 +20,8 @@ INPUT ENUM_APPLIED_PRICE BullsPower_Applied_Price = PRICE_CLOSE;              //
 INPUT int BullsPower_Shift = 0;                         // Shift (relative to the current bar, 0 - default)
 INPUT int BullsPower_SignalOpenMethod = 0;              // Signal open method (0-
 INPUT double BullsPower_SignalOpenLevel = 0.00000000;   // Signal open level
+INPUT int BullsPower_SignalOpenFilterMethod = 0;        // Signal filter method
+INPUT int BullsPower_SignalOpenBoostMethod = 0;         // Signal boost method
 INPUT int BullsPower_SignalCloseMethod = 0;             // Signal close method
 INPUT double BullsPower_SignalCloseLevel = 0.00000000;  // Signal close level
 INPUT int BullsPower_PriceLimitMethod = 0;              // Price limit method
@@ -33,6 +35,8 @@ struct Stg_BullsPower_Params : Stg_Params {
   int BullsPower_Shift;
   int BullsPower_SignalOpenMethod;
   double BullsPower_SignalOpenLevel;
+  int BullsPower_SignalOpenFilterMethod;
+  int BullsPower_SignalOpenBoostMethod;
   int BullsPower_SignalCloseMethod;
   double BullsPower_SignalCloseLevel;
   int BullsPower_PriceLimitMethod;
@@ -46,6 +50,8 @@ struct Stg_BullsPower_Params : Stg_Params {
         BullsPower_Shift(::BullsPower_Shift),
         BullsPower_SignalOpenMethod(::BullsPower_SignalOpenMethod),
         BullsPower_SignalOpenLevel(::BullsPower_SignalOpenLevel),
+        BullsPower_SignalOpenFilterMethod(::BullsPower_SignalOpenFilterMethod),
+        BullsPower_SignalOpenBoostMethod(::BullsPower_SignalOpenBoostMethod),
         BullsPower_SignalCloseMethod(::BullsPower_SignalCloseMethod),
         BullsPower_SignalCloseLevel(::BullsPower_SignalCloseLevel),
         BullsPower_PriceLimitMethod(::BullsPower_PriceLimitMethod),
@@ -97,11 +103,12 @@ class Stg_BullsPower : public Strategy {
     // Initialize strategy parameters.
     ChartParams cparams(_tf);
     BullsPower_Params bp_params(_params.BullsPower_Period, _params.BullsPower_Applied_Price);
-    IndicatorParams bp_iparams(10, INDI_BEARS);
+    IndicatorParams bp_iparams(10, INDI_BULLS);
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_BullsPower(bp_params, bp_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.BullsPower_SignalOpenMethod, _params.BullsPower_SignalOpenMethod,
+                       _params.BullsPower_SignalOpenFilterMethod, _params.BullsPower_SignalOpenBoostMethod,
                        _params.BullsPower_SignalCloseMethod, _params.BullsPower_SignalCloseMethod);
     sparams.SetMaxSpread(_params.BullsPower_MaxSpread);
     // Initialize strategy instance.
@@ -129,6 +136,38 @@ class Stg_BullsPower : public Strategy {
   }
 
   /**
+   * Check strategy's opening signal additional filter.
+   */
+  bool SignalOpenFilter(ENUM_ORDER_TYPE _cmd, int _method = 0) {
+    bool _result = true;
+    if (_method != 0) {
+      // if (METHOD(_method, 0)) _result &= Trade().IsTrend(_cmd);
+      // if (METHOD(_method, 1)) _result &= Trade().IsPivot(_cmd);
+      // if (METHOD(_method, 2)) _result &= Trade().IsPeakHours(_cmd);
+      // if (METHOD(_method, 3)) _result &= Trade().IsRoundNumber(_cmd);
+      // if (METHOD(_method, 4)) _result &= Trade().IsHedging(_cmd);
+      // if (METHOD(_method, 5)) _result &= Trade().IsPeakBar(_cmd);
+    }
+    return _result;
+  }
+
+  /**
+   * Gets strategy's lot size boost (when enabled).
+   */
+  double SignalOpenBoost(ENUM_ORDER_TYPE _cmd, int _method = 0) {
+    bool _result = 1.0;
+    if (_method != 0) {
+      // if (METHOD(_method, 0)) if (Trade().IsTrend(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 1)) if (Trade().IsPivot(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 2)) if (Trade().IsPeakHours(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 3)) if (Trade().IsRoundNumber(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 4)) if (Trade().IsHedging(_cmd)) _result *= 1.1;
+      // if (METHOD(_method, 5)) if (Trade().IsPeakBar(_cmd)) _result *= 1.1;
+    }
+    return _result;
+  }
+
+  /**
    * Check strategy's closing signal.
    */
   bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
@@ -138,9 +177,9 @@ class Stg_BullsPower : public Strategy {
   /**
    * Gets price limit value for profit take or stop loss.
    */
-  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_STG_PRICE_LIMIT_MODE _mode, int _method = 0, double _level = 0.0) {
+  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
     double _trail = _level * Market().GetPipSize();
-    int _direction = Order::OrderDirection(_cmd) * (_mode == LIMIT_VALUE_STOP ? -1 : 1);
+    int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
     switch (_method) {
