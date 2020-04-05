@@ -87,6 +87,7 @@ class Stg_BullsPower : public Strategy {
     sparams.SetSignals(_params.BullsPower_SignalOpenMethod, _params.BullsPower_SignalOpenMethod,
                        _params.BullsPower_SignalOpenFilterMethod, _params.BullsPower_SignalOpenBoostMethod,
                        _params.BullsPower_SignalCloseMethod, _params.BullsPower_SignalCloseMethod);
+    sparams.SetPriceLimits(_params.BullsPower_PriceLimitMethod, _params.BullsPower_PriceLimitLevel);
     sparams.SetMaxSpread(_params.BullsPower_MaxSpread);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_BullsPower(sparams, "BullsPower");
