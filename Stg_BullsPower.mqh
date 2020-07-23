@@ -82,7 +82,7 @@ class Stg_BullsPower : public Strategy {
     BullsPowerParams bp_params(_params.BullsPower_Period, _params.BullsPower_Applied_Price);
     bp_params.SetTf(_tf);
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_BullsPower(bp_params), NULL, NULL);
-    sparams.logger.SetLevel(_log_level);
+    sparams.logger.Ptr().SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.BullsPower_SignalOpenMethod, _params.BullsPower_SignalOpenMethod,
                        _params.BullsPower_SignalOpenFilterMethod, _params.BullsPower_SignalOpenBoostMethod,
