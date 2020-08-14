@@ -8,14 +8,14 @@ INPUT int BullsPower_Period = 13;                                 // Period
 INPUT ENUM_APPLIED_PRICE BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
 INPUT int BullsPower_Shift = 0;                                   // Shift (relative to the current bar, 0 - default)
 INPUT int BullsPower_SignalOpenMethod = 0;                        // Signal open method (0-
-INPUT float BullsPower_SignalOpenLevel = 0.00000000;             // Signal open level
+INPUT float BullsPower_SignalOpenLevel = 0.00000000;              // Signal open level
 INPUT int BullsPower_SignalOpenFilterMethod = 0;                  // Signal filter method
 INPUT int BullsPower_SignalOpenBoostMethod = 0;                   // Signal boost method
 INPUT int BullsPower_SignalCloseMethod = 0;                       // Signal close method
-INPUT float BullsPower_SignalCloseLevel = 0.00000000;            // Signal close level
+INPUT float BullsPower_SignalCloseLevel = 0.00000000;             // Signal close level
 INPUT int BullsPower_PriceLimitMethod = 0;                        // Price limit method
-INPUT float BullsPower_PriceLimitLevel = 0;                      // Price limit level
-INPUT float BullsPower_MaxSpread = 6.0;                          // Max spread to trade (pips)
+INPUT float BullsPower_PriceLimitLevel = 0;                       // Price limit level
+INPUT float BullsPower_MaxSpread = 6.0;                           // Max spread to trade (pips)
 
 // Includes.
 #include <EA31337-classes/Indicators/Indi_BullsPower.mqh>
@@ -27,14 +27,14 @@ struct Stg_BullsPower_Params : StgParams {
   ENUM_APPLIED_PRICE BullsPower_Applied_Price;
   int BullsPower_Shift;
   int BullsPower_SignalOpenMethod;
-  double BullsPower_SignalOpenLevel;
+  float BullsPower_SignalOpenLevel;
   int BullsPower_SignalOpenFilterMethod;
   int BullsPower_SignalOpenBoostMethod;
   int BullsPower_SignalCloseMethod;
-  double BullsPower_SignalCloseLevel;
+  float BullsPower_SignalCloseLevel;
   int BullsPower_PriceLimitMethod;
-  double BullsPower_PriceLimitLevel;
-  double BullsPower_MaxSpread;
+  float BullsPower_PriceLimitLevel;
+  float BullsPower_MaxSpread;
 
   // Constructor: Set default param values.
   Stg_BullsPower_Params()
@@ -179,6 +179,6 @@ class Stg_BullsPower : public Strategy {
         break;
       }
     }
-    return _result;
+    return (float)_result;
   }
 };
