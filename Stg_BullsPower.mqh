@@ -3,58 +3,67 @@
  * Implements BullsPower strategy based on the Bulls Power indicator.
  */
 
-// User input params.
-INPUT int BullsPower_Period = 13;                                 // Period
-INPUT ENUM_APPLIED_PRICE BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
-INPUT int BullsPower_Shift = 0;                                   // Shift (relative to the current bar, 0 - default)
-INPUT int BullsPower_SignalOpenMethod = 0;                        // Signal open method (0-
-INPUT float BullsPower_SignalOpenLevel = 0.00000000;              // Signal open level
-INPUT int BullsPower_SignalOpenFilterMethod = 0;                  // Signal filter method
-INPUT int BullsPower_SignalOpenBoostMethod = 0;                   // Signal boost method
-INPUT int BullsPower_SignalCloseMethod = 0;                       // Signal close method
-INPUT float BullsPower_SignalCloseLevel = 0.00000000;             // Signal close level
-INPUT int BullsPower_PriceLimitMethod = 0;                        // Price limit method
-INPUT float BullsPower_PriceLimitLevel = 0;                       // Price limit level
-INPUT float BullsPower_MaxSpread = 6.0;                           // Max spread to trade (pips)
-
 // Includes.
 #include <EA31337-classes/Indicators/Indi_BullsPower.mqh>
 #include <EA31337-classes/Strategy.mqh>
 
+// User input params.
+INPUT float BullsPower_LotSize = 0;                    // Lot size
+INPUT int BullsPower_SignalOpenMethod = 0;             // Signal open method (0-
+INPUT float BullsPower_SignalOpenLevel = 0.00000000;   // Signal open level
+INPUT int BullsPower_SignalOpenFilterMethod = 0;       // Signal filter method
+INPUT int BullsPower_SignalOpenBoostMethod = 0;        // Signal boost method
+INPUT int BullsPower_SignalCloseMethod = 0;            // Signal close method
+INPUT float BullsPower_SignalCloseLevel = 0.00000000;  // Signal close level
+INPUT int BullsPower_PriceLimitMethod = 0;             // Price limit method
+INPUT float BullsPower_PriceLimitLevel = 0;            // Price limit level
+INPUT int BullsPower_TickFilterMethod = 0;             // Tick filter method
+INPUT float BullsPower_MaxSpread = 6.0;                // Max spread to trade (pips)
+INPUT int BullsPower_Shift = 0;                        // Shift (relative to the current bar, 0 - default)
+INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
+    "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
+INPUT int Indi_BullsPower_Period = 13;                         // Period
+INPUT ENUM_APPLIED_PRICE Indi_BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
+
+// Structs.
+
+// Defines struct with default user indicator values.
+struct Indi_BullsPower_Params_Defaults : BullsPowerParams {
+  Indi_BullsPower_Params_Defaults() : BullsPowerParams(::Indi_BullsPower_Period, ::Indi_BullsPower_Applied_Price) {}
+} indi_bulls_defaults;
+
+// Defines struct to store indicator parameter values.
+struct Indi_BullsPower_Params : public BullsPowerParams {
+  // Struct constructors.
+  void Indi_BullsPower_Params(BullsPowerParams &_params, ENUM_TIMEFRAMES _tf) : BullsPowerParams(_params, _tf) {}
+};
+
+// Defines struct with default user strategy values.
+struct Stg_BullsPower_Params_Defaults : StgParams {
+  Stg_BullsPower_Params_Defaults()
+      : StgParams(::BullsPower_SignalOpenMethod, ::BullsPower_SignalOpenFilterMethod, ::BullsPower_SignalOpenLevel,
+                  ::BullsPower_SignalOpenBoostMethod, ::BullsPower_SignalCloseMethod, ::BullsPower_SignalCloseLevel,
+                  ::BullsPower_PriceLimitMethod, ::BullsPower_PriceLimitLevel, ::BullsPower_TickFilterMethod,
+                  ::BullsPower_MaxSpread, ::BullsPower_Shift) {}
+} stg_bulls_defaults;
+
 // Struct to define strategy parameters to override.
 struct Stg_BullsPower_Params : StgParams {
-  unsigned int BullsPower_Period;
-  ENUM_APPLIED_PRICE BullsPower_Applied_Price;
-  int BullsPower_Shift;
-  int BullsPower_SignalOpenMethod;
-  float BullsPower_SignalOpenLevel;
-  int BullsPower_SignalOpenFilterMethod;
-  int BullsPower_SignalOpenBoostMethod;
-  int BullsPower_SignalCloseMethod;
-  float BullsPower_SignalCloseLevel;
-  int BullsPower_PriceLimitMethod;
-  float BullsPower_PriceLimitLevel;
-  float BullsPower_MaxSpread;
+  Indi_BullsPower_Params iparams;
+  StgParams sparams;
 
-  // Constructor: Set default param values.
-  Stg_BullsPower_Params()
-      : BullsPower_Period(::BullsPower_Period),
-        BullsPower_Applied_Price(::BullsPower_Applied_Price),
-        BullsPower_Shift(::BullsPower_Shift),
-        BullsPower_SignalOpenMethod(::BullsPower_SignalOpenMethod),
-        BullsPower_SignalOpenLevel(::BullsPower_SignalOpenLevel),
-        BullsPower_SignalOpenFilterMethod(::BullsPower_SignalOpenFilterMethod),
-        BullsPower_SignalOpenBoostMethod(::BullsPower_SignalOpenBoostMethod),
-        BullsPower_SignalCloseMethod(::BullsPower_SignalCloseMethod),
-        BullsPower_SignalCloseLevel(::BullsPower_SignalCloseLevel),
-        BullsPower_PriceLimitMethod(::BullsPower_PriceLimitMethod),
-        BullsPower_PriceLimitLevel(::BullsPower_PriceLimitLevel),
-        BullsPower_MaxSpread(::BullsPower_MaxSpread) {}
+  // Struct constructors.
+  Stg_BullsPower_Params(Indi_BullsPower_Params &_iparams, StgParams &_sparams)
+      : iparams(indi_bulls_defaults, _iparams.tf), sparams(stg_bulls_defaults) {
+    iparams = _iparams;
+    sparams = _sparams;
+  }
 };
 
 // Loads pair specific param values.
 #include "sets/EURUSD_H1.h"
 #include "sets/EURUSD_H4.h"
+#include "sets/EURUSD_H8.h"
 #include "sets/EURUSD_M1.h"
 #include "sets/EURUSD_M15.h"
 #include "sets/EURUSD_M30.h"
@@ -66,24 +75,24 @@ class Stg_BullsPower : public Strategy {
 
   static Stg_BullsPower *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Stg_BullsPower_Params _params;
+    Indi_BullsPower_Params _indi_params(indi_bulls_defaults, _tf);
+    StgParams _stg_params(stg_bulls_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Stg_BullsPower_Params>(_params, _tf, stg_bulls_m1, stg_bulls_m5, stg_bulls_m15, stg_bulls_m30,
-                                           stg_bulls_h1, stg_bulls_h4, stg_bulls_h4);
+      SetParamsByTf<Indi_BullsPower_Params>(_indi_params, _tf, indi_bulls_m1, indi_bulls_m5, indi_bulls_m15,
+                                            indi_bulls_m30, indi_bulls_h1, indi_bulls_h4, indi_bulls_h8);
+      SetParamsByTf<StgParams>(_stg_params, _tf, stg_bulls_m1, stg_bulls_m5, stg_bulls_m15, stg_bulls_m30, stg_bulls_h1,
+                               stg_bulls_h4, stg_bulls_h8);
     }
+    // Initialize indicator.
+    BullsPowerParams bulls_params(_indi_params);
+    _stg_params.SetIndicator(new Indi_BullsPower(_indi_params));
     // Initialize strategy parameters.
-    BullsPowerParams bp_params(_params.BullsPower_Period, _params.BullsPower_Applied_Price);
-    bp_params.SetTf(_tf);
-    StgParams sparams(new Trade(_tf, _Symbol), new Indi_BullsPower(bp_params), NULL, NULL);
-    sparams.logger.Ptr().SetLevel(_log_level);
-    sparams.SetMagicNo(_magic_no);
-    sparams.SetSignals(_params.BullsPower_SignalOpenMethod, _params.BullsPower_SignalOpenMethod,
-                       _params.BullsPower_SignalOpenFilterMethod, _params.BullsPower_SignalOpenBoostMethod,
-                       _params.BullsPower_SignalCloseMethod, _params.BullsPower_SignalCloseMethod);
-    sparams.SetPriceLimits(_params.BullsPower_PriceLimitMethod, _params.BullsPower_PriceLimitLevel);
-    sparams.SetMaxSpread(_params.BullsPower_MaxSpread);
+    _stg_params.GetLog().SetLevel(_log_level);
+    _stg_params.SetMagicNo(_magic_no);
+    _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
-    Strategy *_strat = new Stg_BullsPower(sparams, "BullsPower");
+    Strategy *_strat = new Stg_BullsPower(_stg_params, "BullsPower");
+    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 

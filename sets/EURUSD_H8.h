@@ -4,14 +4,14 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_BullsPower_Params_H1 : Indi_BullsPower_Params {
-  Indi_BullsPower_Params_H1() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_H1) { shift = 0; }
-} indi_bulls_h1;
+struct Indi_BullsPower_Params_H8 : Indi_BullsPower_Params {
+  Indi_BullsPower_Params_H8() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_H8) { shift = 0; }
+} indi_bulls_h8;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct stg_bulls_Params_H1 : StgParams {
+struct stg_bulls_Params_H8 : StgParams {
   // Struct constructor.
-  stg_bulls_Params_H1() : StgParams(stg_bulls_defaults) {
+  stg_bulls_Params_H8() : StgParams(stg_bulls_defaults) {
     lot_size = 0;
     signal_open_method = 0;
     signal_open_filter = 1;
@@ -24,4 +24,4 @@ struct stg_bulls_Params_H1 : StgParams {
     tick_filter_method = 1;
     max_spread = 0;
   }
-} stg_bulls_h1;
+} stg_bulls_h8;
