@@ -15,8 +15,8 @@ INPUT int BullsPower_SignalOpenFilterMethod = 0;       // Signal filter method
 INPUT int BullsPower_SignalOpenBoostMethod = 0;        // Signal boost method
 INPUT int BullsPower_SignalCloseMethod = 0;            // Signal close method
 INPUT float BullsPower_SignalCloseLevel = 0.00000000;  // Signal close level
-INPUT int BullsPower_PriceLimitMethod = 0;             // Price limit method
-INPUT float BullsPower_PriceLimitLevel = 0;            // Price limit level
+INPUT int BullsPower_PriceStopMethod = 0;              // Price stop method
+INPUT float BullsPower_PriceStopLevel = 0;             // Price stop level
 INPUT int BullsPower_TickFilterMethod = 0;             // Tick filter method
 INPUT float BullsPower_MaxSpread = 6.0;                // Max spread to trade (pips)
 INPUT int BullsPower_Shift = 0;                        // Shift (relative to the current bar, 0 - default)
@@ -43,7 +43,7 @@ struct Stg_BullsPower_Params_Defaults : StgParams {
   Stg_BullsPower_Params_Defaults()
       : StgParams(::BullsPower_SignalOpenMethod, ::BullsPower_SignalOpenFilterMethod, ::BullsPower_SignalOpenLevel,
                   ::BullsPower_SignalOpenBoostMethod, ::BullsPower_SignalCloseMethod, ::BullsPower_SignalCloseLevel,
-                  ::BullsPower_PriceLimitMethod, ::BullsPower_PriceLimitLevel, ::BullsPower_TickFilterMethod,
+                  ::BullsPower_PriceStopMethod, ::BullsPower_PriceStopLevel, ::BullsPower_TickFilterMethod,
                   ::BullsPower_MaxSpread, ::BullsPower_Shift) {}
 } stg_bulls_defaults;
 
@@ -166,9 +166,9 @@ class Stg_BullsPower : public Strategy {
   }
 
   /**
-   * Gets price limit value for profit take or stop loss.
+   * Gets price stop value for profit take or stop loss.
    */
-  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
+  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
     Indi_BullsPower *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
