@@ -3,10 +3,6 @@
  * Implements BullsPower strategy based on the Bulls Power indicator.
  */
 
-// Includes.
-#include <EA31337-classes/Indicators/Indi_BullsPower.mqh>
-#include <EA31337-classes/Strategy.mqh>
-
 // User input params.
 INPUT float BullsPower_LotSize = 0;                    // Lot size
 INPUT int BullsPower_SignalOpenMethod = 0;             // Signal open method (0-
