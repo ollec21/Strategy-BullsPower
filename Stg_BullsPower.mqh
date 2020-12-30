@@ -16,6 +16,7 @@ INPUT float BullsPower_PriceStopLevel = 0;             // Price stop level
 INPUT int BullsPower_TickFilterMethod = 0;             // Tick filter method
 INPUT float BullsPower_MaxSpread = 6.0;                // Max spread to trade (pips)
 INPUT int BullsPower_Shift = 0;                        // Shift (relative to the current bar, 0 - default)
+INPUT int BullsPower_OrderCloseTime = -10;             // Order close time in mins (>0) or bars (<0)
 INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
     "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
 INPUT int Indi_BullsPower_Period = 13;                         // Period
@@ -40,7 +41,7 @@ struct Stg_BullsPower_Params_Defaults : StgParams {
       : StgParams(::BullsPower_SignalOpenMethod, ::BullsPower_SignalOpenFilterMethod, ::BullsPower_SignalOpenLevel,
                   ::BullsPower_SignalOpenBoostMethod, ::BullsPower_SignalCloseMethod, ::BullsPower_SignalCloseLevel,
                   ::BullsPower_PriceStopMethod, ::BullsPower_PriceStopLevel, ::BullsPower_TickFilterMethod,
-                  ::BullsPower_MaxSpread, ::BullsPower_Shift) {}
+                  ::BullsPower_MaxSpread, ::BullsPower_Shift, ::BullsPower_OrderCloseTime) {}
 } stg_bulls_defaults;
 
 // Struct to define strategy parameters to override.
