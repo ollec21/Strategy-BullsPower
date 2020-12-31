@@ -13,7 +13,7 @@ struct stg_bulls_Params_M1 : StgParams {
   // Struct constructor.
   stg_bulls_Params_M1() : StgParams(stg_bulls_defaults) {
     lot_size = 0;
-    signal_open_method = 0;
+    signal_open_method = -1;
     signal_open_filter = 1;
     signal_open_level = 0;
     signal_open_boost = 0;
