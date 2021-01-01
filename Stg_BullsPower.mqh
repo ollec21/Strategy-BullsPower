@@ -109,39 +109,36 @@ class Stg_BullsPower : public Strategy {
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         // Strong uptrend - the histogram is located above balance line.
-        _result &= _indi[CURR][0] > _level;
-        if (_method != 0) {
+        // When the histogram is above zero level, but the beams are directed downwards (the tendency to decrease),
+        // then we can assume that, despite the still bullish sentiments on the market, their strength is weakening.
+        _result = _indi[CURR][0] > 0 && _indi.IsIncreasing(3);
+        _result &= _indi.IsIncByPct(_level, 0, 0, 2);
+        if (_result && _method != 0) {
+          if (METHOD(_method, 0)) _result &= _indi.IsIncreasing(2, 0, 3);
+          if (METHOD(_method, 1)) _result &= _indi.IsIncreasing(2, 0, 5);
           // The growth of histogram, which is below zero, suggests that,
           // while sellers dominate the market, their strength begins to weaken and buyers gradually increase their
           // interest.
-          if (METHOD(_method, 0)) _result &= _indi[PREV][0] > _indi[PPREV][0];  // ... 2 consecutive columns are green.
-          if (METHOD(_method, 1)) _result &= _indi[PPREV][0] > _indi[3][0];     // ... 3 consecutive columns are green.
-          if (METHOD(_method, 2)) _result &= _indi[3][0] > _indi[4][0];         // ... 4 consecutive columns are green.
-          // When the histogram is above zero level, but the beams are directed downwards (the tendency to decrease),
-          // then we can assume that, despite the still bullish sentiments on the market, their strength is weakening.
-          if (METHOD(_method, 3)) _result &= _indi[PREV][0] < _indi[PPREV][0];  // ... 2 consecutive columns are red.
-          if (METHOD(_method, 4)) _result &= _indi[PPREV][0] < _indi[3][0];     // ... 3 consecutive columns are red.
-          if (METHOD(_method, 5)) _result &= _indi[3][0] < _indi[4][0];         // ... 4 consecutive columns are red.
-          if (METHOD(_method, 6)) _result &= _indi[PREV][0] > 0;
+          if (METHOD(_method, 2)) _result &= _indi[PPREV][0] < 0;
           // @todo: Divergence situations between the price schedule and Bulls Power histogram - a traditionally strong
           // reversal signal.
         }
         break;
       case ORDER_TYPE_SELL:
         // Histogram is below zero level.
-        _result &= _indi[CURR][0] < _level;
-        if (_method != 0) {
+        // When the histogram passes through the zero level from top down,
+        // bulls lost control of the market and bears increase pressure; waiting for price to turn down.
+        _result = _indi[CURR][0] < 0 && _indi.IsDecreasing(3);
+        _result &= _indi.IsDecByPct(_level, 0, 0, 2);
+        if (_result && _method != 0) {
+          // When histogram is below zero level, but with the rays pointing upwards (upward trend),
+          // then we can assume that, in spite of still bearish sentiment in the market, their strength begins to
+          // weaken.
+          if (METHOD(_method, 0)) _result &= _indi.IsDecreasing(2, 0, 3);
+          if (METHOD(_method, 1)) _result &= _indi.IsDecreasing(2, 0, 5);
           // If the histogram is above zero level, but the beams are directed downwards (the tendency to decrease),
           // then we can assume that, despite the still bullish sentiments on the market, their strength is weakening
-          if (METHOD(_method, 0)) _result &= _indi[PREV][0] < _indi[PPREV][0];  // ... 2 consecutive columns are red.
-          if (METHOD(_method, 1)) _result &= _indi[PPREV][0] < _indi[3][0];     // ... 3 consecutive columns are red.
-          if (METHOD(_method, 2)) _result &= _indi[3][0] < _indi[4][0];         // ... 4 consecutive columns are red.
-          if (METHOD(_method, 3)) _result &= _indi[PREV][0] > _indi[PPREV][0];  // ... 2 consecutive columns are green.
-          if (METHOD(_method, 4)) _result &= _indi[PPREV][0] > _indi[3][0];     // ... 3 consecutive columns are green.
-          if (METHOD(_method, 5)) _result &= _indi[3][0] > _indi[4][0];         // ... 4 consecutive columns are green.
-          // When the histogram passes through the zero level from top down,
-          // bulls lost control of the market and bears increase pressure; waiting for price to turn down.
-          if (METHOD(_method, 6)) _result &= _indi[PREV][0] < 0;
+          if (METHOD(_method, 2)) _result &= _indi[PPREV][0] > 0;
           // @todo: Divergence situations between the price schedule and Bulls Power histogram - a traditionally strong
           // reversal signal.
         }
