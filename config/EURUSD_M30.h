@@ -5,7 +5,11 @@
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
 struct Indi_BullsPower_Params_M30 : Indi_BullsPower_Params {
-  Indi_BullsPower_Params_M30() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_M30) { shift = 0; }
+  Indi_BullsPower_Params_M30() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_M30) {
+    applied_price = (ENUM_APPLIED_PRICE)0;
+    period = 14;
+    shift = 0;
+  }
 } indi_bulls_m30;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
