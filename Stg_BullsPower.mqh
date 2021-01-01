@@ -19,14 +19,15 @@ INPUT int BullsPower_Shift = 0;                   // Shift (relative to the curr
 INPUT int BullsPower_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
     "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
-INPUT int Indi_BullsPower_Period = 13;                         // Period
-INPUT ENUM_APPLIED_PRICE Indi_BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
+INPUT int BullsPower_Indi_BullsPower_Period = 13;              // Period
+INPUT ENUM_APPLIED_PRICE BullsPower_Indi_BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
 
 // Structs.
 
 // Defines struct with default user indicator values.
 struct Indi_BullsPower_Params_Defaults : BullsPowerParams {
-  Indi_BullsPower_Params_Defaults() : BullsPowerParams(::Indi_BullsPower_Period, ::Indi_BullsPower_Applied_Price) {}
+  Indi_BullsPower_Params_Defaults()
+      : BullsPowerParams(::BullsPower_Indi_BullsPower_Period, ::BullsPower_Indi_BullsPower_Applied_Price) {}
 } indi_bulls_defaults;
 
 // Defines struct to store indicator parameter values.
