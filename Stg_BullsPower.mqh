@@ -4,19 +4,19 @@
  */
 
 // User input params.
-INPUT float BullsPower_LotSize = 0;                    // Lot size
-INPUT int BullsPower_SignalOpenMethod = 0;             // Signal open method (0-
-INPUT float BullsPower_SignalOpenLevel = 0.00000000;   // Signal open level
-INPUT int BullsPower_SignalOpenFilterMethod = 0;       // Signal filter method
-INPUT int BullsPower_SignalOpenBoostMethod = 0;        // Signal boost method
-INPUT int BullsPower_SignalCloseMethod = 0;            // Signal close method
-INPUT float BullsPower_SignalCloseLevel = 0.00000000;  // Signal close level
-INPUT int BullsPower_PriceStopMethod = 0;              // Price stop method
-INPUT float BullsPower_PriceStopLevel = 0;             // Price stop level
-INPUT int BullsPower_TickFilterMethod = 0;             // Tick filter method
-INPUT float BullsPower_MaxSpread = 6.0;                // Max spread to trade (pips)
-INPUT int BullsPower_Shift = 0;                        // Shift (relative to the current bar, 0 - default)
-INPUT int BullsPower_OrderCloseTime = -10;             // Order close time in mins (>0) or bars (<0)
+INPUT float BullsPower_LotSize = 0;               // Lot size
+INPUT int BullsPower_SignalOpenMethod = 0;        // Signal open method (0-
+INPUT float BullsPower_SignalOpenLevel = 0.0f;    // Signal open level
+INPUT int BullsPower_SignalOpenFilterMethod = 1;  // Signal filter method
+INPUT int BullsPower_SignalOpenBoostMethod = 0;   // Signal boost method
+INPUT int BullsPower_SignalCloseMethod = 0;       // Signal close method
+INPUT float BullsPower_SignalCloseLevel = 0.0f;   // Signal close level
+INPUT int BullsPower_PriceStopMethod = 0;         // Price stop method
+INPUT float BullsPower_PriceStopLevel = 0;        // Price stop level
+INPUT int BullsPower_TickFilterMethod = 1;        // Tick filter method
+INPUT float BullsPower_MaxSpread = 4.0;           // Max spread to trade (pips)
+INPUT int BullsPower_Shift = 0;                   // Shift (relative to the current bar, 0 - default)
+INPUT int BullsPower_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
     "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
 INPUT int Indi_BullsPower_Period = 13;                         // Period
