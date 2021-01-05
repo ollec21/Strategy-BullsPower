@@ -9,5 +9,5 @@ BullsPower_Indi_BullsPower_Shift={{ shift | default(0) }}
 BullsPower_LotSize={{ lot_size | default(0) }}
 BullsPower_PriceStopMethod=0
 BullsPower_SignalOpenFilterMethod=1
-BullsPower_SignalOpenLevel={{ signal_open_level | default(0) }}
+BullsPower_SignalOpenLevel={{ signal_open_level | replace("(float)", "") | float | default(0) }}
 BullsPower_TickFilterMethod=1
