@@ -25,7 +25,7 @@ struct Stg_BullsPower_Params_{{ Timeframe }} : StgParams {
     signal_close_method = {{ BullsPower_SignalCloseMethod | default(0) }};
     signal_close_level = (float){{ BullsPower_SignalCloseLevel | default(0) }};
     price_stop_method = {{ BullsPower_PriceStopMethod | default(0) }};
-    price_stop_level = {{ BullsPower_SignalCloseLevel | default(1) }};
+    price_stop_level = (float){{ BullsPower_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ BullsPower_TickFilterMethod  | default(1) }};
     max_spread = {{ BullsPower_MaxSpread | default(0) }};
   }
