@@ -7,7 +7,6 @@
 struct Indi_BullsPower_Params_{{ Timeframe }} : Indi_BullsPower_Params {
   Indi_BullsPower_Params_{{ Timeframe }}() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ BullsPower_Indi_BullsPower_Applied_Price | default(0) }};
-    ma_method = {{ BullsPower_Indi_BullsPower_MA_Method | default(0) }};
     period = {{ BullsPower_Indi_BullsPower_Period | default(0) }};
     shift = {{ BullsPower_Shift | default(0) }};
   }

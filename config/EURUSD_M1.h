@@ -7,7 +7,6 @@
 struct Indi_BullsPower_Params_M1 : Indi_BullsPower_Params {
   Indi_BullsPower_Params_M1() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_M1) {
     applied_price = (ENUM_APPLIED_PRICE)3;
-    ma_method = 0;
     period = 24;
     shift = 0;
   }
