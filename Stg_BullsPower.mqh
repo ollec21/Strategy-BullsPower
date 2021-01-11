@@ -21,20 +21,16 @@ INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
     "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
 INPUT int BullsPower_Indi_BullsPower_Period = 13;              // Period
 INPUT ENUM_APPLIED_PRICE BullsPower_Indi_BullsPower_Applied_Price = PRICE_CLOSE;  // Applied Price
+INPUT int BullsPower_Indi_BullsPower_Shift = 0;                                   // Shift
 
 // Structs.
 
 // Defines struct with default user indicator values.
 struct Indi_BullsPower_Params_Defaults : BullsPowerParams {
   Indi_BullsPower_Params_Defaults()
-      : BullsPowerParams(::BullsPower_Indi_BullsPower_Period, ::BullsPower_Indi_BullsPower_Applied_Price) {}
+      : BullsPowerParams(::BullsPower_Indi_BullsPower_Period, ::BullsPower_Indi_BullsPower_Applied_Price,
+                         ::BullsPower_Indi_BullsPower_Shift) {}
 } indi_bulls_defaults;
-
-// Defines struct to store indicator parameter values.
-struct Indi_BullsPower_Params : public BullsPowerParams {
-  // Struct constructors.
-  void Indi_BullsPower_Params(BullsPowerParams &_params, ENUM_TIMEFRAMES _tf) : BullsPowerParams(_params, _tf) {}
-};
 
 // Defines struct with default user strategy values.
 struct Stg_BullsPower_Params_Defaults : StgParams {
@@ -47,11 +43,11 @@ struct Stg_BullsPower_Params_Defaults : StgParams {
 
 // Struct to define strategy parameters to override.
 struct Stg_BullsPower_Params : StgParams {
-  Indi_BullsPower_Params iparams;
+  BullsPowerParams iparams;
   StgParams sparams;
 
   // Struct constructors.
-  Stg_BullsPower_Params(Indi_BullsPower_Params &_iparams, StgParams &_sparams)
+  Stg_BullsPower_Params(BullsPowerParams &_iparams, StgParams &_sparams)
       : iparams(indi_bulls_defaults, _iparams.tf), sparams(stg_bulls_defaults) {
     iparams = _iparams;
     sparams = _sparams;
@@ -73,11 +69,11 @@ class Stg_BullsPower : public Strategy {
 
   static Stg_BullsPower *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_BullsPower_Params _indi_params(indi_bulls_defaults, _tf);
+    BullsPowerParams _indi_params(indi_bulls_defaults, _tf);
     StgParams _stg_params(stg_bulls_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_BullsPower_Params>(_indi_params, _tf, indi_bulls_m1, indi_bulls_m5, indi_bulls_m15,
-                                            indi_bulls_m30, indi_bulls_h1, indi_bulls_h4, indi_bulls_h8);
+      SetParamsByTf<BullsPowerParams>(_indi_params, _tf, indi_bulls_m1, indi_bulls_m5, indi_bulls_m15, indi_bulls_m30,
+                                      indi_bulls_h1, indi_bulls_h4, indi_bulls_h8);
       SetParamsByTf<StgParams>(_stg_params, _tf, stg_bulls_m1, stg_bulls_m5, stg_bulls_m15, stg_bulls_m30, stg_bulls_h1,
                                stg_bulls_h4, stg_bulls_h8);
     }

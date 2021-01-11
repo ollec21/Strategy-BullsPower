@@ -4,8 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_BullsPower_Params_{{ Timeframe }} : Indi_BullsPower_Params {
-  Indi_BullsPower_Params_{{ Timeframe }}() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_{{ Timeframe }}) {
+struct Indi_BullsPower_Params_{{ Timeframe }} : BullsPowerParams {
+  Indi_BullsPower_Params_{{ Timeframe }}() : BullsPowerParams(indi_bulls_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ BullsPower_Indi_BullsPower_Applied_Price | default(0) }};
     period = {{ BullsPower_Indi_BullsPower_Period | default(0) }};
     shift = {{ BullsPower_Shift | default(0) }};

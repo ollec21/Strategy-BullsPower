@@ -4,8 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_BullsPower_Params_M1 : Indi_BullsPower_Params {
-  Indi_BullsPower_Params_M1() : Indi_BullsPower_Params(indi_bulls_defaults, PERIOD_M1) {
+struct Indi_BullsPower_Params_M1 : BullsPowerParams {
+  Indi_BullsPower_Params_M1() : BullsPowerParams(indi_bulls_defaults, PERIOD_M1) {
     applied_price = (ENUM_APPLIED_PRICE)3;
     period = 24;
     shift = 0;
