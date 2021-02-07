@@ -4,19 +4,20 @@
  */
 
 // User input params.
-INPUT float BullsPower_LotSize = 0;               // Lot size
-INPUT int BullsPower_SignalOpenMethod = 0;        // Signal open method (0-
-INPUT float BullsPower_SignalOpenLevel = 0.0f;    // Signal open level
-INPUT int BullsPower_SignalOpenFilterMethod = 1;  // Signal filter method
-INPUT int BullsPower_SignalOpenBoostMethod = 0;   // Signal boost method
-INPUT int BullsPower_SignalCloseMethod = 0;       // Signal close method
-INPUT float BullsPower_SignalCloseLevel = 0.0f;   // Signal close level
-INPUT int BullsPower_PriceStopMethod = 0;         // Price stop method
-INPUT float BullsPower_PriceStopLevel = 0;        // Price stop level
-INPUT int BullsPower_TickFilterMethod = 1;        // Tick filter method
-INPUT float BullsPower_MaxSpread = 4.0;           // Max spread to trade (pips)
-INPUT int BullsPower_Shift = 0;                   // Shift (relative to the current bar, 0 - default)
-INPUT int BullsPower_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
+INPUT string __BullsPower_Parameters__ = "-- BullsPower strategy params --";  // >>> BULLS POWER <<<
+INPUT float BullsPower_LotSize = 0;                                           // Lot size
+INPUT int BullsPower_SignalOpenMethod = 0;                                    // Signal open method (0-
+INPUT float BullsPower_SignalOpenLevel = 0.0f;                                // Signal open level
+INPUT int BullsPower_SignalOpenFilterMethod = 1;                              // Signal filter method
+INPUT int BullsPower_SignalOpenBoostMethod = 0;                               // Signal boost method
+INPUT int BullsPower_SignalCloseMethod = 0;                                   // Signal close method
+INPUT float BullsPower_SignalCloseLevel = 0.0f;                               // Signal close level
+INPUT int BullsPower_PriceStopMethod = 0;                                     // Price stop method
+INPUT float BullsPower_PriceStopLevel = 0;                                    // Price stop level
+INPUT int BullsPower_TickFilterMethod = 1;                                    // Tick filter method
+INPUT float BullsPower_MaxSpread = 4.0;                                       // Max spread to trade (pips)
+INPUT int BullsPower_Shift = 0;             // Shift (relative to the current bar, 0 - default)
+INPUT int BullsPower_OrderCloseTime = -20;  // Order close time in mins (>0) or bars (<0)
 INPUT string __BullsPower_Indi_BullsPower_Parameters__ =
     "-- BullsPower strategy: BullsPower indicator params --";  // >>> BullsPower strategy: BullsPower indicator <<<
 INPUT int BullsPower_Indi_BullsPower_Period = 13;              // Period
@@ -71,12 +72,12 @@ class Stg_BullsPower : public Strategy {
     // Initialize strategy initial values.
     BullsPowerParams _indi_params(indi_bulls_defaults, _tf);
     StgParams _stg_params(stg_bulls_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<BullsPowerParams>(_indi_params, _tf, indi_bulls_m1, indi_bulls_m5, indi_bulls_m15, indi_bulls_m30,
-                                      indi_bulls_h1, indi_bulls_h4, indi_bulls_h8);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_bulls_m1, stg_bulls_m5, stg_bulls_m15, stg_bulls_m30, stg_bulls_h1,
-                               stg_bulls_h4, stg_bulls_h8);
-    }
+#ifdef __config__
+    SetParamsByTf<BullsPowerParams>(_indi_params, _tf, indi_bulls_m1, indi_bulls_m5, indi_bulls_m15, indi_bulls_m30,
+                                    indi_bulls_h1, indi_bulls_h4, indi_bulls_h8);
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_bulls_m1, stg_bulls_m5, stg_bulls_m15, stg_bulls_m30, stg_bulls_h1,
+                             stg_bulls_h4, stg_bulls_h8);
+#endif
     // Initialize indicator.
     BullsPowerParams bulls_params(_indi_params);
     _stg_params.SetIndicator(new Indi_BullsPower(_indi_params));
@@ -86,7 +87,6 @@ class Stg_BullsPower : public Strategy {
     _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_BullsPower(_stg_params, "BullsPower");
-    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 
